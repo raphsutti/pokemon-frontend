@@ -10,7 +10,9 @@ const GET_POKEMON = gql`
           height
           weight
           sprite
+          spriteBack
           spriteShiny
+          spriteShinyBack
         }
       }
     }
@@ -35,7 +37,9 @@ interface PokemonDetail {
   height: number;
   weight: number;
   sprite: string;
+  spriteBack: string;
   spriteShiny: string;
+  spriteShinyBack: string;
 }
 
 interface GetPokemonsVar {
@@ -61,7 +65,12 @@ export const PokemonComponent = () => {
           <p>height: {pokemonDetail.height}</p>
           <p>weight: {pokemonDetail.weight}</p>
           <img alt="pokemon sprite" src={pokemonDetail.sprite} />
+          <img alt="pokemon sprite back" src={pokemonDetail.spriteBack} />
           <img alt="pokemon shiny sprite" src={pokemonDetail.spriteShiny} />
+          <img
+            alt="pokemon shiny sprite back"
+            src={pokemonDetail.spriteShinyBack}
+          />
         </div>
       ))}
     </>
