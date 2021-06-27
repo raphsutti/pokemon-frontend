@@ -1,9 +1,9 @@
 import { gql, useQuery } from "@apollo/client";
+import { useState } from "react";
 
 const GET_POKEMON = gql`
-  query GetPokemons {
-    getPokemons(offset: 0, limit: 26) {
-      count
+  query GetPokemons($offset: Int!, $limit: Int!) {
+    getPokemons(offset: $offset, limit: $limit) {
       results {
         name
         pokemonDetail {
@@ -24,7 +24,6 @@ interface GetPokemonResult {
 }
 
 interface Result {
-  count: number;
   results: Pokemon[];
 }
 
@@ -48,9 +47,13 @@ interface GetPokemonsVar {
 }
 
 export const PokemonComponent = () => {
-  const { loading, error, data } = useQuery<GetPokemonResult, GetPokemonsVar>(
-    GET_POKEMON
-  );
+  const [offset, setOffset] = useState(0);
+  const { loading, error, data, fetchMore } = useQuery<
+    GetPokemonResult,
+    GetPokemonsVar
+  >(GET_POKEMON, {
+    variables: { offset, limit: 3 },
+  });
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error</p>;
   if (!data?.getPokemons) return <p>Nothing</p>;
@@ -73,6 +76,15 @@ export const PokemonComponent = () => {
           />
         </div>
       ))}
+      <button
+        onClick={() => {
+          setOffset(offset + 3);
+          // TODO - Figure out Apollo cache to build up final data results
+          fetchMore({ variables: { offset, limit: 3 } });
+        }}
+      >
+        Load next 3 Pokemons
+      </button>
     </>
   );
 };

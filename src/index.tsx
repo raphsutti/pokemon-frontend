@@ -3,10 +3,19 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
+import { offsetLimitPagination } from "@apollo/client/utilities";
 
 const client = new ApolloClient({
   uri: "http://localhost:4000/",
-  cache: new InMemoryCache(),
+  cache: new InMemoryCache({
+    typePolicies: {
+      Result: {
+        fields: {
+          results: offsetLimitPagination(),
+        },
+      },
+    },
+  }),
 });
 
 ReactDOM.render(
