@@ -6,6 +6,7 @@ const GET_POKEMON = gql`
       results {
         name
         pokemonDetail {
+          id
           height
           weight
           sprite
@@ -32,6 +33,7 @@ interface Pokemon {
 }
 
 interface PokemonDetail {
+  id: number;
   height: number;
   weight: number;
   sprite: string;
@@ -50,7 +52,7 @@ export const PokemonComponent = () => {
     GetPokemonResult,
     GetPokemonsVar
   >(GET_POKEMON, {
-    variables: { offset: 0, limit: 3 },
+    variables: { offset: 0, limit: 10 },
   });
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error</p>;
@@ -62,25 +64,44 @@ export const PokemonComponent = () => {
     <>
       {results.map(({ name, pokemonDetail }) => (
         <div>
-          <p>name: {name}</p>
-          <p>height: {pokemonDetail.height}</p>
-          <p>weight: {pokemonDetail.weight}</p>
-          <img alt="pokemon sprite" src={pokemonDetail.sprite} />
-          <img alt="pokemon sprite back" src={pokemonDetail.spriteBack} />
-          <img alt="pokemon shiny sprite" src={pokemonDetail.spriteShiny} />
-          <img
-            alt="pokemon shiny sprite back"
-            src={pokemonDetail.spriteShinyBack}
-          />
+          <tr style={{ textAlign: "center" }} key={name}>
+            <td>id: {pokemonDetail.id}</td>
+            <td>{name}</td>
+            <td>height: {pokemonDetail.height}</td>
+            <td>weight: {pokemonDetail.weight}</td>
+          </tr>
+          <tr>
+            <td>
+              <img alt="pokemon sprite" src={pokemonDetail.sprite} />
+            </td>
+
+            <td>
+              <img alt="pokemon sprite back" src={pokemonDetail.spriteBack} />
+            </td>
+            <td>
+              <img alt="pokemon shiny sprite" src={pokemonDetail.spriteShiny} />
+            </td>
+            <td>
+              <img
+                alt="pokemon shiny sprite back"
+                src={pokemonDetail.spriteShinyBack}
+              />
+            </td>
+          </tr>
         </div>
       ))}
-      <button
-        onClick={() => {
-          fetchMore({ variables: { offset: data.getPokemons.results.length } });
-        }}
-      >
-        Load next 3 Pokemons
-      </button>
+      <div style={{ margin: "0 60px" }}>
+        <button
+          style={{ height: "30px", width: "200px" }}
+          onClick={() => {
+            fetchMore({
+              variables: { offset: data.getPokemons.results.length },
+            });
+          }}
+        >
+          Load next 10 Pokemons
+        </button>
+      </div>
     </>
   );
 };
