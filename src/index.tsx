@@ -3,19 +3,37 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
-import { offsetLimitPagination } from "@apollo/client/utilities";
 
 const client = new ApolloClient({
   uri: "http://localhost:4000/",
   cache: new InMemoryCache({
     typePolicies: {
-      Result: {
+      Pokemons: {
         fields: {
-          results: offsetLimitPagination(),
+          results: {
+            merge: (
+              existing: unknown[] | undefined = [],
+              incoming: unknown[]
+            ) => {
+              console.log("existing", existing);
+              console.log("incoming", incoming);
+              const merged = [...existing, ...incoming];
+              return merged;
+            },
+          },
+        },
+      },
+      Query: {
+        fields: {
+          getPokemons: {
+            keyArgs: ["limit"],
+          },
         },
       },
     },
   }),
+  // TODO Turn this off in prod
+  connectToDevTools: true,
 });
 
 ReactDOM.render(
