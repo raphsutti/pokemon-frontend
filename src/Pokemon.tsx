@@ -9,10 +9,12 @@ const GET_POKEMON = gql`
           id
           height
           weight
-          sprite
-          spriteBack
-          spriteShiny
-          spriteShinyBack
+          sprites {
+            front_default
+            back_default
+            front_shiny
+            back_shiny
+          }
         }
       }
     }
@@ -36,10 +38,14 @@ interface PokemonDetail {
   id: number;
   height: number;
   weight: number;
-  sprite: string;
-  spriteBack: string;
-  spriteShiny: string;
-  spriteShinyBack: string;
+  sprites: Sprites;
+}
+
+interface Sprites {
+  front_default: string;
+  back_default: string;
+  front_shiny: string;
+  back_shiny: string;
 }
 
 interface GetPokemonsVar {
@@ -72,19 +78,28 @@ export const PokemonComponent = () => {
           </tr>
           <tr>
             <td>
-              <img alt="pokemon sprite" src={pokemonDetail.sprite} />
+              <img
+                alt="pokemon sprite"
+                src={pokemonDetail.sprites.front_default}
+              />
             </td>
 
             <td>
-              <img alt="pokemon sprite back" src={pokemonDetail.spriteBack} />
+              <img
+                alt="pokemon sprite back"
+                src={pokemonDetail.sprites.back_default}
+              />
             </td>
             <td>
-              <img alt="pokemon shiny sprite" src={pokemonDetail.spriteShiny} />
+              <img
+                alt="pokemon shiny sprite"
+                src={pokemonDetail.sprites.front_shiny}
+              />
             </td>
             <td>
               <img
                 alt="pokemon shiny sprite back"
-                src={pokemonDetail.spriteShinyBack}
+                src={pokemonDetail.sprites.back_shiny}
               />
             </td>
           </tr>
