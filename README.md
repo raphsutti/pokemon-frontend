@@ -13,7 +13,7 @@ ie.
 
 The backend handles the merging strategy and supplies the full data to the frontend
 
-## Prerequesite
+## Prerequisite
 
 [`pokemon-graphql`](https://github.com/raphsutti/pokemon-graphql) running
 
